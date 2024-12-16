@@ -4,6 +4,11 @@
 
 Este es un proyecto backend para gestionar prácticas profesionales utilizando Spring Boot. La API proporciona endpoints para gestionar prácticas, profesores y estudiantes en el contexto de un sistema de registro de prácticas profesionales.
 
+Este trabajo fue desarrollado por el **Grupo 12, Sección 70**, integrado por:  
+- Mario Quevedo  
+- Patricio Ibargaray  
+- Franco Vasquez  
+
 ## 🚀 Características
 
 - **Gestión de prácticas**: Los estudiantes pueden agregar y consultar sus prácticas, mientras que los profesores pueden agregar, actualizar, consultar y eliminar registros de prácticas.
