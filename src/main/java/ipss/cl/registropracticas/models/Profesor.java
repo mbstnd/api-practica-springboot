@@ -14,11 +14,11 @@ public class Profesor {
   @Id
   private String id; // Identificador único del profesor
 
-  private String name;
+  private String nombre;
   private String email;
-  private String phone;
+  private String telefono;
 
   // Relación con las prácticas supervisadas
-  private List<Practica> practica; // Lista de IDs de prácticas supervisadas
+  private List<String> practiceIds; // Lista de IDs de prácticas supervisadas
 
 }

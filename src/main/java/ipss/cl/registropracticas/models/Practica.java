@@ -1,28 +1,37 @@
 package ipss.cl.registropracticas.models;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import org.springframework.data.annotation.Id;
 import lombok.Data;
 
 @Data
 @Document(collection = "practicas")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Practica {
 
   @Id
   private String id; // Identificador único de la práctica
 
-  private String studentId;
+  @Indexed
   private String profesorId;
-  private String description;
-  private LocalDate startDate; // Fecha de inicio de la práctica
-  private LocalDate endDate; // Fecha de término de la práctica
-  private String companyName; // Nombre de la empresa
-  private String companyAddress; // Dirección de la empresa
-  private String companyPhone; // Teléfono de la empresa
-  private String directSupervisor; // Nombre del jefe directo en la empresa
-  private String supervisorContact; // Contacto del jefe directo
+
+  private String descripcion;
+  private LocalDate fechaInicio;
+  private LocalDate fechaTermino;
+
+  private Empresa empresa;
+  private JefeDirecto jefeDirecto;
+  private ProfesorSupervisor profesorSupervisor;
+
+  private EstadoPractica estado;
+
+  private List<String> studentIds;
 
 }
