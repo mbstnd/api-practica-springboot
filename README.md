@@ -6,10 +6,10 @@ Este es un proyecto backend para gestionar prácticas profesionales utilizando S
 
 ## 🚀 Características
 
-- **Gestión de prácticas**: Permite crear, actualizar y obtener detalles de prácticas profesionales.
-- **Gestión de profesores**: Los profesores pueden ser registrados, consultados y relacionados con las prácticas.
+- **Gestión de prácticas**: Los estudiantes pueden agregar y consultar sus prácticas, mientras que los profesores pueden agregar, actualizar, consultar y eliminar registros de prácticas.
+- **Gestión de profesores**: Los profesores pueden ser registrados y asignados a prácticas para supervisar y hacer seguimiento de los estudiantes.
 - **Gestión de estudiantes**: Los estudiantes pueden ser registrados y asignados a prácticas específicas.
-- **Base de datos**: Utiliza una base de datos para almacenar la información de prácticas, profesores y estudiantes.
+- **Base de datos**: Utiliza MongoDB, una base de datos no relacional para almacenar la información de prácticas, profesores y estudiantes de manera flexible y escalable.
 
 ## 📚 Endpoints
 
