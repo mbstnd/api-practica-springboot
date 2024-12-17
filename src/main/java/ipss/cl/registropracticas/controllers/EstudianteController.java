@@ -1,6 +1,5 @@
 package ipss.cl.registropracticas.controllers;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,24 +25,24 @@ public class EstudianteController {
   @PostMapping(value = "create", produces = "application/json")
   public ResponseEntity<Object> create(@RequestBody Estudiante estudiante) {
     try {
-      // Crear el estudiante usando el servicio
-      estudianteService.create(estudiante);
+      // Crear el estudiante usando el servicio y persistirlo
+      Estudiante estudianteGuardado = estudianteService.create(estudiante);
 
-      // Construir la respuesta
+      // Crear la respuesta con el estudiante guardado (que tiene el ID generado)
       EstudianteResponse estudianteResponse = new EstudianteResponse();
       estudianteResponse.setStatus(200);
       estudianteResponse.setMessage("Estudiante creado correctamente.");
-      estudianteResponse.setEstudiante(estudiante);
+      estudianteResponse.setEstudiante(estudianteGuardado); // Estudiante guardado con ID
 
-      return ResponseEntity.ok().body(estudianteResponse);
+      return ResponseEntity.ok().body(estudianteResponse); // Retornar el estudiante creado
+
     } catch (Exception e) {
-      // Manejar excepciones y devolver error con mensaje claro
-      return ResponseEntity.status(500).body(new HashMap<>() {
-        {
-          put("status", 500);
-          put("message", "Error al crear el estudiante: " + e.getMessage());
-        }
-      });
+      // Manejar excepciones y devolver un error con mensaje claro
+      EstudianteResponse errorResponse = new EstudianteResponse();
+      errorResponse.setStatus(500);
+      errorResponse.setMessage("Error al crear el estudiante: " + e.getMessage());
+
+      return ResponseEntity.status(500).body(errorResponse); // Retornar el error con la respuesta estándar
     }
   }
 
@@ -66,6 +65,10 @@ public class EstudianteController {
   @GetMapping(value = "getById/{id}", produces = "application/json")
   public ResponseEntity<Object> getById(@PathVariable("id") String estudianteId) {
     Estudiante estudiante = estudianteService.getById(estudianteId);
+
+    if (estudiante == null) {
+      return ResponseEntity.status(404).body("Estudiante no encontrado");
+    }
 
     EstudianteResponse estudianteResponse = new EstudianteResponse();
     estudianteResponse.setStatus(200);
