@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 import lombok.Data;
 
 @Data
@@ -20,5 +20,8 @@ public class Profesor {
 
   // Relación con las prácticas supervisadas
   private List<String> practiceIds; // Lista de IDs de prácticas supervisadas
+
+  // Clase interna que actúa como una vista simplificada del profesor
+  private ProfesorSupervisor profesorSupervisor;
 
 }
