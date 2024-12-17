@@ -35,7 +35,7 @@ public class PracticasController {
 
   // Endpoint para agregar una práctica para un estudiante
   @PostMapping(value = "create", produces = "application/json")
-  public ResponseEntity<Practica> addPractica(@RequestBody Practica practica) {
+  public ResponseEntity<Practica> create(@RequestBody Practica practica) {
     // Si la práctica ya tiene estudiantes asignados, agregar el ID de un estudiante
     // a la lista
     if (practica.getStudentIds() != null && !practica.getStudentIds().isEmpty()) {
@@ -85,18 +85,20 @@ public class PracticasController {
     return practicaRepository.findById(id)
         .map(practica -> {
           // Crear una respuesta con la práctica encontrada
-          PracticaResponse practicaResponse = new PracticaResponse();
-          practicaResponse.setStatus(200);
-          practicaResponse.setMessage("Práctica encontrada");
-          practicaResponse.setPractica(practica);
+          PracticaResponse practicaResponse = PracticaResponse.builder()
+              .status(200)
+              .message("Práctica encontrada")
+              .practica(practica)
+              .build();
           return ResponseEntity.ok(practicaResponse); // Retorna el objeto encontrado
         })
         .orElseGet(() -> {
           // Si no se encuentra la práctica, retorno una respuesta 404 con un mensaje
           // detallado
-          PracticaResponse errorResponse = new PracticaResponse();
-          errorResponse.setStatus(404);
-          errorResponse.setMessage("Práctica no encontrada");
+          PracticaResponse errorResponse = PracticaResponse.builder()
+              .status(404)
+              .message("Práctica no encontrada")
+              .build();
           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         });
   }
