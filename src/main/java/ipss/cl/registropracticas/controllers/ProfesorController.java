@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import ipss.cl.registropracticas.models.Practica;
 import ipss.cl.registropracticas.responses.PracticaResponse;
+import ipss.cl.registropracticas.services.EstudianteService;
 import ipss.cl.registropracticas.services.PracticaService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,19 +24,35 @@ public class ProfesorController {
   @Autowired
   private PracticaService practicaService;
 
-  // Agregar práctica
+  @Autowired
+  EstudianteService estudianteService;
 
-  @PostMapping(value = "create", produces = "application/json")
-  public ResponseEntity<Object> createPractica(@RequestBody Practica practica) {
+  // Agregar práctica (para profesor)
 
-    PracticaResponse practicaResponse = new PracticaResponse();
+  @PostMapping(value = "/create", produces = "application/json")
+  public ResponseEntity<PracticaResponse> create(@RequestBody Practica practica) {
+    // Guardar la práctica como profesor
+    Practica practicaGuardada = practicaService.addPracticaAsTeacher(practica);
 
-    practicaResponse.setStatus(200);
-    practicaResponse.setMessage("Practica creada correctamente.");
-    practicaResponse.setPractica(practica);
+    // Asociar la práctica a los estudiantes si hay IDs disponibles
+    List<String> studentIds = practica.getStudentIds();
+    if (studentIds != null && !studentIds.isEmpty()) {
+      studentIds.forEach(
+          estudianteId -> estudianteService.asignarPracticaAEstudiante(estudianteId, practicaGuardada.getId()));
+    }
 
-    return ResponseEntity.ok().body(practicaResponse);
+    // Crear la respuesta
+    PracticaResponse practicaResponse = PracticaResponse.builder()
+        .status(200)
+        .message("Práctica creada y asociada correctamente a los estudiantes.")
+        .practica(practicaGuardada)
+        .build();
+
+    // Retornar la respuesta
+    return ResponseEntity.ok(practicaResponse);
   }
+
+  // Obtener todas las prácticas (para profesor)
 
   @GetMapping(value = "getAll", produces = "application/json")
   public ResponseEntity<List<Practica>> getAllPracticas() {
@@ -43,16 +60,22 @@ public class ProfesorController {
     return ResponseEntity.ok(practicas);
   }
 
+  // Actualizar práctica (para profesor)
+
   @PutMapping(value = "update/{id}", produces = "application/json")
-  public ResponseEntity<Object> updatePractica(@PathVariable("id") String id, @RequestBody Practica practica) {
+  public ResponseEntity<PracticaResponse> updatePractica(@PathVariable("id") String id,
+      @RequestBody Practica practica) {
     Practica practicaActualizada = practicaService.updatePractica(id, practica);
 
-    PracticaResponse practicaResponse = new PracticaResponse();
-    practicaResponse.setStatus(200);
-    practicaResponse.setMessage("Práctica actualizada correctamente.");
-    practicaResponse.setPractica(practicaActualizada);
+    // Crear la respuesta
+    PracticaResponse practicaResponse = PracticaResponse.builder()
+        .status(200)
+        .message("Práctica actualizada correctamente.")
+        .practica(practicaActualizada)
+        .build();
 
-    return ResponseEntity.ok().body(practicaResponse);
+    // Retornar la respuesta
+    return ResponseEntity.ok(practicaResponse);
 
   }
 
