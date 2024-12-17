@@ -1,5 +1,6 @@
 package ipss.cl.registropracticas.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,7 @@ public class EstudianteService {
 
   // Listar todos los estudiantes
   public List<Estudiante> getAll() {
-    // Obtener todos los estudiantes
-    List<Estudiante> estudiantes = estudianteRepository.findAll();
-    return estudiantes;
+    return estudianteRepository.findAll();
   }
 
   // Buscar estudiante por ID
@@ -38,6 +37,26 @@ public class EstudianteService {
   // Eliminar estudiante por ID
   public void delete(String id) {
     estudianteRepository.deleteById(id);
+  }
+
+  public void asignarPracticaAEstudiante(String estudianteId, String practicaId) {
+    Estudiante estudiante = getById(estudianteId); // Usa el método `getById` para manejar excepciones
+
+    // Inicializar la lista de prácticas si está vacía
+    if (estudiante.getPracticaIds() == null) {
+      estudiante.setPracticaIds(new ArrayList<>());
+    }
+
+    // Verificar si la práctica ya está asignada
+    if (estudiante.getPracticaIds().contains(practicaId)) {
+      throw new IllegalArgumentException("La práctica con ID " + practicaId + " ya está asignada al estudiante.");
+    }
+
+    // Agregar el ID de la práctica a la lista del estudiante
+    estudiante.getPracticaIds().add(practicaId);
+
+    // Guardar los cambios en la base de datos
+    estudianteRepository.save(estudiante);
   }
 
 }
