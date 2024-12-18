@@ -8,9 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ipss.cl.registropracticas.models.Estudiante;
+import ipss.cl.registropracticas.models.Practica;
 import ipss.cl.registropracticas.responses.EstudianteResponse;
 import ipss.cl.registropracticas.services.EstudianteService;
+import ipss.cl.registropracticas.services.PracticaService;
+
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +25,9 @@ public class EstudianteController {
 
   @Autowired
   private EstudianteService estudianteService;
+
+  @Autowired
+  private PracticaService practicaService;
 
   @PostMapping(value = "create", produces = "application/json")
   public ResponseEntity<Object> create(@RequestBody Estudiante estudiante) {
@@ -34,10 +41,10 @@ public class EstudianteController {
       estudianteResponse.setMessage("Estudiante creado correctamente.");
       estudianteResponse.setEstudiante(estudianteGuardado); // Estudiante guardado con ID
 
-      return ResponseEntity.ok().body(estudianteResponse); // Retornar el estudiante creado
+      return ResponseEntity.ok().body(estudianteResponse);
 
     } catch (Exception e) {
-      // Manejar excepciones y devolver un error con mensaje claro
+
       EstudianteResponse errorResponse = new EstudianteResponse();
       errorResponse.setStatus(500);
       errorResponse.setMessage("Error al crear el estudiante: " + e.getMessage());
@@ -48,18 +55,15 @@ public class EstudianteController {
 
   @GetMapping(value = "getAll", produces = "application/json")
   public ResponseEntity<Object> getAll() {
-    // Obtener la lista de estudiantes del servicio
     List<Estudiante> estudiantes = estudianteService.getAll();
 
-    // Crear la respuesta con los estudiantes
     EstudianteResponse estudianteResponse = new EstudianteResponse();
     estudianteResponse.setStatus(200);
     estudianteResponse.setMessage("Estudiantes obtenidos correctamente.");
     estudianteResponse.setEstudiante(null);
     estudianteResponse.setEstudiantes(estudiantes); // Asignar la lista de estudiantes con las prácticas
 
-    // Retornar la respuesta en formato JSON
-    return ResponseEntity.ok().body(estudianteResponse); // Respuesta con el objeto EstudianteResponse
+    return ResponseEntity.ok().body(estudianteResponse);
   }
 
   @GetMapping(value = "getById/{id}", produces = "application/json")
@@ -76,6 +80,25 @@ public class EstudianteController {
     estudianteResponse.setEstudiante(estudiante);
 
     return ResponseEntity.ok().body(estudianteResponse);
+  }
+
+  @PutMapping(value = "/{estudianteId}/asignarPractica/{practicaId}", produces = "application/json")
+  public ResponseEntity<Object> asignarPracticaAEstudiante(
+      @PathVariable String estudianteId,
+      @PathVariable String practicaId) {
+
+    try {
+      // Crear un objeto Practica (solo con el ID para no sobrescribir otros campos)
+      Practica practica = new Practica();
+      practica.setId(practicaId);
+
+      // Llamar al método addPracticaAsStudent del servicio
+      practicaService.addPracticaAsStudent(estudianteId, practica);
+
+      return ResponseEntity.ok().body("Práctica asignada correctamente.");
+    } catch (Exception e) {
+      return ResponseEntity.status(400).body("Error al asignar práctica: " + e.getMessage());
+    }
   }
 
 }
