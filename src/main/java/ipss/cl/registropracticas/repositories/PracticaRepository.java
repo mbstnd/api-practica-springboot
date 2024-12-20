@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface PracticaRepository extends MongoRepository<Practica, String> {
 
-  List<Practica> findByStudentIds(String studentId); // Buscar todas las prácticas de un estudiante por su ID
+  List<Practica> findByEstudiantes(String estudiantes);
+
+  List<Practica> findByFechaInicio(String fechaInicio, String fechaTermino);
+
+  List<Practica> findByEmpresa(String empresaNombre);
 
 }
