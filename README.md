@@ -1,4 +1,4 @@
-# 🛠️ Práctica API - Backend
+# 🛠️ Práctica API REST
 
 ## 📜 Descripción
 
@@ -53,7 +53,7 @@ Este proyecto backend para el sistema de registro de prácticas profesionales es
 
 ### 📝 Prácticas
 - **GET /api/practicas/getAll:** Obtiene todas las prácticas registradas.  
-- **GET /api/practicas/getById/{id}:** Obtiene una práctica por su ID.  
+- **GET /api/practicas/getPracticaById/{id}:** Obtiene una práctica por su ID.  
 - **POST /api/practicas/create:** Crea una nueva práctica.  
 - **PUT /api/practicas/update/{id}:** Actualiza una práctica existente.
 
