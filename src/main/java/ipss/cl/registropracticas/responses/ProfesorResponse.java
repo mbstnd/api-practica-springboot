@@ -1,16 +1,13 @@
 package ipss.cl.registropracticas.responses;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import ipss.cl.registropracticas.models.Profesor;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProfesorResponse {
-
-  private String id;
-  private String nombre;
-  private String email;
-  private String telefono;
-  private List<String> practiceIds;
-
+  private int status; // Código de estado (por ejemplo, 200, 400, 500)
+  private String message;
+  private Profesor profesor;
 }

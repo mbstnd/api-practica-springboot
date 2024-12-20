@@ -1,5 +1,6 @@
 package ipss.cl.registropracticas.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,9 +12,11 @@ import ipss.cl.registropracticas.models.Practica;
 import ipss.cl.registropracticas.repositories.EstudianteRepository;
 import ipss.cl.registropracticas.repositories.PracticaRepository;
 import ipss.cl.registropracticas.repositories.ProfesorRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PracticaService {
+
   @Autowired
   private PracticaRepository practicaRepository;
 
@@ -24,6 +27,7 @@ public class PracticaService {
   private ProfesorRepository profesorRepository;
 
   // Crear práctica con validación de relaciones
+  @Transactional
   public Practica createPractica(Practica practica) {
     // Verificar si el profesor supervisor tiene id, si no, guardarlo primero
     if (practica.getProfesorSupervisor() != null && practica.getProfesorSupervisor().getId() == null) {
@@ -82,39 +86,39 @@ public class PracticaService {
     Practica practica = practicaRepository.findById(practicaId)
         .orElseThrow(() -> new RuntimeException("Práctica no encontrada"));
 
+    // Buscar los estudiantes por sus ObjectId
     List<Estudiante> estudiantes = estudianteRepository.findAllById(estudianteIds);
 
     // Asignar la lista de estudiantes a la práctica
     practica.setEstudiantes(estudiantes);
+
+    // Guardar la práctica con los estudiantes asignados
     return practicaRepository.save(practica);
   }
 
-  // Asignar una práctica a un estudiante
   public Estudiante asignarPracticaAEstudiante(String estudianteId, String practicaId) {
-    Estudiante estudiante = estudianteRepository.findById(estudianteId).orElse(null);
-    if (estudiante == null) {
-      throw new RuntimeException("Estudiante no encontrado");
-    }
+    Estudiante estudiante = estudianteRepository.findById(estudianteId)
+        .orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
 
-    Practica practica = practicaRepository.findById(practicaId).orElse(null);
-    if (practica == null) {
-      throw new RuntimeException("Práctica no encontrada");
-    }
-
-    // Verificar si la práctica y el estudiante tienen IDs válidos
-    if (practica.getId() == null) {
-      throw new RuntimeException("La práctica no tiene ID válido");
-    }
-
-    if (estudiante.getId() == null) {
-      throw new RuntimeException("El estudiante no tiene ID válido");
-    }
+    Practica practica = practicaRepository.findById(practicaId)
+        .orElseThrow(() -> new RuntimeException("Práctica no encontrada"));
 
     // Asignar la práctica al estudiante
     estudiante.setPractica(practica);
 
-    // Guardar los cambios del estudiante en la base de datos
-    return estudianteRepository.save(estudiante);
+    // Guardar el estudiante con la práctica asignada
+    estudiante = estudianteRepository.save(estudiante);
+
+    // Asegurarse de que los estudiantes también estén relacionados con la práctica
+    if (practica.getEstudiantes() == null) {
+      practica.setEstudiantes(new ArrayList<>());
+    }
+    practica.getEstudiantes().add(estudiante);
+
+    // Guardar la práctica con los estudiantes asignados
+    practicaRepository.save(practica);
+
+    return estudiante;
   }
 
   public Practica updatePractica(String id, Practica practicaRequest) {
@@ -123,6 +127,7 @@ public class PracticaService {
   }
 
   public boolean deletePractica(String id) {
+
     Optional<Practica> practicaOpt = practicaRepository.findById(id);
     if (practicaOpt.isPresent()) {
       practicaRepository.delete(practicaOpt.get());

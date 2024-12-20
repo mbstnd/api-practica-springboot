@@ -61,7 +61,6 @@ public class PracticaController {
         .body(practicas);
   }
 
-  // Actualiza una práctica
   @PutMapping(value = "update/{id}", produces = "application/json")
   public ResponseEntity<PracticaResponse> updatePractica(@PathVariable String id,
       @RequestBody Practica practicaRequest) {
@@ -112,7 +111,7 @@ public class PracticaController {
   @PostMapping(value = "getPracticaByEstudiante/{estudianteId}", produces = "application/json")
   public ResponseEntity<Estudiante> asignarPracticaAEstudiante(
       @PathVariable String estudianteId,
-      @RequestBody String practicaId) {
+      @PathVariable String practicaId) {
     Estudiante estudiante = practicaService.asignarPracticaAEstudiante(estudianteId, practicaId);
     EstudiantesResponse response = new EstudiantesResponse();
     response.setStatus(200);

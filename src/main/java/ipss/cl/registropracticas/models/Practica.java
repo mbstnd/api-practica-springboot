@@ -1,35 +1,31 @@
 package ipss.cl.registropracticas.models;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.springframework.data.annotation.Id;
 import lombok.Data;
 
 @Data
 @Document(collection = "practicas")
+@CompoundIndex(name = "unique_practica_index", def = "{'fechaInicio': 1, 'fechaTermino': 1, 'empresa.id': 1}", unique = true)
 public class Practica {
 
   @Id
   private String id;
-
-  private LocalDate fechaInicio;
-  private LocalDate fechaTermino;
+  private String fechaInicio;
+  private String fechaTermino;
   private String descripcion;
-  private String estado;
-
-  private JefeDirecto jefeDirecto;
 
   private Empresa empresa;
-
-  @DBRef(lazy = false)
+  private JefeDirecto jefeDirecto;
   private Profesor profesorSupervisor;
 
-  @DBRef
-  private List<Estudiante> estudiantes = new ArrayList<>();
+  @JsonManagedReference
+  private List<Estudiante> estudiantes;
 
 }

@@ -55,6 +55,8 @@ public class EstudianteService {
 
     // Asignar la práctica al estudiante
     estudiante.setPractica(practica);
+
+    // Guardar el estudiante con la práctica asignada
     return estudianteRepository.save(estudiante);
   }
 
