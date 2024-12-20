@@ -133,4 +133,6 @@ mvn spring-boot:run
 - **Usa herramientas como Postman o Insomnia para probar los endpoints y verificar que las funcionalidades estén operativas.**  
 
 
+## 🔑 License
 
+- [MIT](https://github.com/mbstnd/api-practica-springboot/blob/main/LICENSE).
