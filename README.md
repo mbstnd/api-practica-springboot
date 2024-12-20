@@ -132,7 +132,6 @@ mvn spring-boot:run
 - **Accede a la API a través de tu navegador en http://localhost:8080.**  
 - **Usa herramientas como Postman o Insomnia para probar los endpoints y verificar que las funcionalidades estén operativas.**  
 
-
 ## 🔑 License
 
-- [MIT](https://github.com/mbstnd/api-practica-springboot/blob/main/LICENSE).
+- [MIT](https://github.com/mbstnd/api-practica-springboot/blob/main/LICENSE)
