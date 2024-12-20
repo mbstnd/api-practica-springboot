@@ -1,14 +1,14 @@
 package ipss.cl.registropracticas.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ipss.cl.registropracticas.models.Estudiante;
+import ipss.cl.registropracticas.models.Practica;
 import ipss.cl.registropracticas.repositories.EstudianteRepository;
-// import ipss.cl.registropracticas.repositories.PracticaRepository;
+import ipss.cl.registropracticas.repositories.PracticaRepository;
 
 @Service
 public class EstudianteService {
@@ -16,47 +16,57 @@ public class EstudianteService {
   @Autowired
   private EstudianteRepository estudianteRepository;
 
-  // @Autowired
-  // private PracticaRepository practicaRepository;
+  @Autowired
+  private PracticaRepository practicaRepository;
 
-  // Listar todos los estudiantes
-  public List<Estudiante> getAll() {
+  public List<Estudiante> getAllEstudiantes() {
     return estudianteRepository.findAll();
   }
 
-  // Buscar estudiante por ID
-  public Estudiante getById(String id) {
-    return estudianteRepository.findById(id).orElse(null);
-  }
-
-  // Crear estudiante
-  public Estudiante create(Estudiante estudiante) {
+  public Estudiante createEstudiante(Estudiante estudiante) {
+    if (estudiante.getPractica() != null && estudiante.getPractica().getId() == null) {
+      // Si la práctica no tiene id, guardarla primero
+      Practica practica = practicaRepository.save(estudiante.getPractica());
+      estudiante.setPractica(practica);
+    }
     return estudianteRepository.save(estudiante);
   }
 
-  // Eliminar estudiante por ID
-  public void delete(String id) {
-    estudianteRepository.deleteById(id);
+  public Estudiante obtenerEstudiante(String id) {
+    return estudianteRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
   }
 
-  public void asignarPracticaAEstudiante(String estudianteId, String practicaId) {
-    Estudiante estudiante = getById(estudianteId); // Usa el método `getById` para manejar excepciones
+  public Estudiante actualizarEstudiante(String id, Estudiante estudianteActualizado) {
+    Estudiante estudianteExistente = obtenerEstudiante(id);
+    estudianteExistente.setNombreCompleto(estudianteActualizado.getNombreCompleto());
+    estudianteExistente.setCarrera(estudianteActualizado.getCarrera());
+    estudianteExistente.setCorreo(estudianteActualizado.getCorreo());
+    estudianteExistente.setTelefono(estudianteActualizado.getTelefono());
+    estudianteExistente.setDireccion(estudianteActualizado.getDireccion());
+    return estudianteRepository.save(estudianteExistente);
+  }
 
-    // Inicializar la lista de prácticas si está vacía
-    if (estudiante.getPracticaIds() == null) {
-      estudiante.setPracticaIds(new ArrayList<>());
-    }
+  // Asignar una práctica a un estudiante
+  public Estudiante asignarPractica(String estudianteId, String practicaId) {
+    Estudiante estudiante = obtenerEstudiante(estudianteId);
+    Practica practica = practicaRepository.findById(practicaId)
+        .orElseThrow(() -> new RuntimeException("Práctica no encontrada"));
 
-    // Verificar si la práctica ya está asignada
-    if (estudiante.getPracticaIds().contains(practicaId)) {
-      throw new IllegalArgumentException("La práctica con ID " + practicaId + " ya está asignada al estudiante.");
-    }
+    // Asignar la práctica al estudiante
+    estudiante.setPractica(practica);
+    return estudianteRepository.save(estudiante);
+  }
 
-    // Agregar el ID de la práctica a la lista del estudiante
-    estudiante.getPracticaIds().add(practicaId);
+  // Obtener las prácticas de un estudiante
+  public Practica obtenerPracticaEstudiante(String estudianteId) {
+    Estudiante estudiante = obtenerEstudiante(estudianteId);
+    return estudiante.getPractica();
+  }
 
-    // Guardar los cambios en la base de datos
-    estudianteRepository.save(estudiante);
+  public void eliminarEstudiante(String id) {
+    Estudiante estudiante = obtenerEstudiante(id);
+    estudianteRepository.delete(estudiante);
   }
 
 }
