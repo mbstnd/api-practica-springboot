@@ -1,4 +1,4 @@
-# 🛠️ Práctica API REST
+## 📚 API REST para Colegio Técnico Profesional
 
 ## 📜 Descripción
 
