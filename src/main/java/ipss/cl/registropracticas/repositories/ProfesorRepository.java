@@ -8,10 +8,6 @@ import ipss.cl.registropracticas.models.Profesor;
 
 public interface ProfesorRepository extends MongoRepository<Profesor, String> {
 
-  List<Profesor> findByNombre(String nombre);
-
-  List<Profesor> findByEmail(String email);
-
-  List<Profesor> findByPracticeIds(List<String> practiceIds);
+  List<Profesor> findByNombreCompleto(String nombreCompleto);
 
 }
