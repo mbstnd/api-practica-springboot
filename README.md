@@ -27,46 +27,45 @@ Este proyecto backend para el sistema de registro de prácticas profesionales es
 
 ## 🛠️ Stack
 
-### Lenguaje de Programación
-- **Java 21:** El lenguaje base para la implementación de la lógica backend.
+- [**Java 21**](https://www.oracle.com/java/technologies/javase//jdk21-archive-downloads.html) - The programming language used for backend logic implementation.
+- [**Spring Boot 3.4.0**](https://spring.io/projects/spring-boot) - Framework for building robust and modular applications.
 
-### Framework Principal
-- **Spring Boot 3.4.0:** Framework que facilita la construcción de aplicaciones robustas y modulares.
+### 📚 Databases
+- [**JPA (Java Persistence API)**](https://jakarta.ee/specifications/persistence/) - Interacting with relational databases and building RESTful services.
+- [**MongoDB**](https://www.mongodb.com/) - NoSQL database for flexible storage and dynamic queries.
 
-### Bases de Datos
-- **JPA (Java Persistence API):** Interacción con bases de datos relacionales y RESTFULL.  
-- **MongoDB:** Base de datos NoSQL para almacenamiento flexible y consultas dinámicas.
+### 🧰 Development Tools
+- [**Spring Boot DevTools**](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using.devtools) - For automatic reload and accelerating development.
+- [**Maven**](https://maven.apache.org/) - Dependency management and build tool.
 
-### Herramientas de Desarrollo
-- **Spring Boot DevTools:** Para recarga automática y aceleración del desarrollo.  
-- **Maven:** Gestión de dependencias y compilación.
+### ⚙️ Utilities
+- [**Lombok**](https://projectlombok.org/) - Reduces boilerplate code with annotations.
 
-### Utilidades
-- **Lombok:** Reduce el código repetitivo mediante anotaciones.  
-
-### Testing
-- **Spring Boot Starter Test:** Dependencias para pruebas unitarias e integración.
+### 🧪 Testing
+- [**Spring Boot Starter Test**](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-testing) - Dependencies for unit and integration testing.
 
 ---
 
 ## 📚 Endpoints
 
+### 👩‍🎓 Estudiantes
+- **GET api/estudiantes/getAll:** Obtiene todos los estudiantes registrados.  
+- **GET api/estudiantes/getById/{id}:** Obtiene un estudiante por su ID.  
+- **POST api/estudiantes/create:** Crea un nuevo estudiante y lo asocia a una practica.
+
 ### 📝 Prácticas
-- **GET /api/practicas/getAll:** Obtiene todas las prácticas registradas.  
-- **GET /api/practicas/getPracticaById/{id}:** Obtiene una práctica por su ID.  
-- **POST /api/practicas/create:** Crea una nueva práctica.  
-- **PUT /api/practicas/update/{id}:** Actualiza una práctica existente.
+- **GET api/practicas/getAll:** Obtiene todas las prácticas registradas.  
+- **GET api/practicas/getPracticaById/{id}:** Obtiene una práctica por su ID.  
+- **POST api/practicas/create:** Crea una nueva práctica.  
+- **PUT api/practicas/update/{id}:** Actualiza una práctica existente.
+- **DELETE api/practicas/delete/{id}:** Elimina una práctica existente.
 
 ### 👨‍🏫 Profesores
-- **GET /api/profesores/getAll:** Obtiene todos los profesores registrados.  
-- **GET /api/profesores/getById/{id}:** Obtiene un profesor por su ID.  
-- **POST /api/profesores/create:** Crea un nuevo profesor.  
-- **PUT /api/profesores/update/{id}:** Actualiza un profesor existente.
-
-### 👩‍🎓 Estudiantes
-- **GET /api/estudiantes/getAll:** Obtiene todos los estudiantes registrados.  
-- **GET /api/estudiantes/getById/{id}:** Obtiene un estudiante por su ID.  
-- **POST /api/estudiantes/create:** Crea un nuevo estudiante.
+- **GET api/profesores/getAll:** Obtiene todos los profesores registrados.  
+- **GET api/profesores/getById/{id}:** Obtiene un profesor por su ID.  
+- **POST api/profesores/create:** Crea un nuevo profesor.  
+- **PUT api/profesores/update/{id}:** Actualiza un profesor existente.
+- **DELETE api/profesores/delete/{id}:** Elimina una profesor existente.
 
 ---
 
