@@ -2,6 +2,7 @@ package ipss.cl.registropracticas.models;
 
 import java.util.List;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -21,6 +22,7 @@ public class Practica {
 
   private Empresa empresa;
   private JefeDirecto jefeDirecto;
+  @DBRef
   private Profesor profesorSupervisor;
 
   @JsonManagedReference
